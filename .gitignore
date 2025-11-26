@@ -1,0 +1,25 @@
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+
+# Env and secrets
+.env
+.env.*
+!.env.example
+!**/.env.example
+
+# Node / build artifacts
+node_modules/
+dist/
+coverage/
+*.log
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Framework outputs
+.next/
+out/
+build/
+.cache/
