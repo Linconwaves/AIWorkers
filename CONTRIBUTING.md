@@ -23,6 +23,7 @@ Thanks for improving these Linconwaves AI Workers examples! Here’s how to get 
    - How you tested it.
    - Any follow-up todos or known gaps.
 5. Keep PRs small and scoped; larger efforts are easier to review in pieces.
+6. Expect at least one reviewer; prefer squash merges unless discussed otherwise.
 
 ## Coding notes
 - TypeScript + ESLint + Prettier are used in the StoreCanvas example; align with existing patterns.

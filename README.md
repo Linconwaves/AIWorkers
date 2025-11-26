@@ -2,8 +2,9 @@
 
 Sample projects that show how to wire Linconwaves AI Workers into real workflows. Fork them, swap in your own prompts and UI, and ship AI-powered features fast.
 
-- `examples/StoreCanvas`: Full-stack reference app for generating and exporting app-store ready visuals with AI (Fastify + TypeScript backend, Next.js + Tailwind client).
-- `examples/callai`, `examples/storygenerator`: Additional playgrounds for experimenting with the platform.
+- `examples/StoreCanvas`: Full-stack reference app for generating and exporting app-store ready visuals with AI (Fastify + TypeScript backend, Next.js + Tailwind client). See `examples/StoreCanvas/README.md` for architecture and setup.
+- `examples/callai`: Simple caller experience that demonstrates invoking AI Workers from a lightweight UI.
+- `examples/storygenerator`: Minimal content generator that shows prompt-to-output flows.
 
 See the platform at https://ai.linconwaves.com and developer docs at https://developers.linconwaves.com.
 
@@ -27,8 +28,12 @@ Prereqs: Node 18+, npm, a Linconwaves AI Workers API key, and credentials for on
 ### Frontend (`examples/StoreCanvas/client`)
 1. `cd examples/StoreCanvas/client`
 2. `npm install`
-3. Set `NEXT_PUBLIC_API_BASE_URL` (e.g., `http://localhost:4000`) in `.env.local`
+3. Copy `.env.local.example` to `.env.local` and set `NEXT_PUBLIC_API_BASE_URL` (e.g., `http://localhost:4000`)
 4. Start the app: `npm run dev` (Next.js 13)
+
+### Tests
+- Backend: `cd examples/StoreCanvas/server && npm test`
+- Frontend: `cd examples/StoreCanvas/client && npm run lint && npm run typecheck`
 
 ## Configure AI Workers
 The backend expects:
@@ -45,7 +50,7 @@ Grab model slugs and usage examples from https://developers.linconwaves.com.
 4. Deploy the backend to your host of choice and the client to Vercel/Netlify; update `NEXT_PUBLIC_API_BASE_URL`.
 
 ## Contributing
-Issues and PRs are welcome. See `CONTRIBUTING.md` for how to file bugs, propose ideas, and open pull requests.
+Issues and PRs are welcome. See `CONTRIBUTING.md` for how to file bugs, propose ideas, and open pull requests. For security reports, please follow `SECURITY.md`. By participating, you agree to the `CODE_OF_CONDUCT.md`.
 
 ## License
 MIT — see `LICENSE`.
