@@ -52,5 +52,8 @@ Grab model slugs and usage examples from https://developers.linconwaves.com.
 ## Contributing
 Issues and PRs are welcome. See `CONTRIBUTING.md` for how to file bugs, propose ideas, and open pull requests. For security reports, please follow `SECURITY.md`. By participating, you agree to the `CODE_OF_CONDUCT.md`.
 
+## Roadmap
+See `ROADMAP.md` for a starting-point roadmap you can adapt in a wiki.
+
 ## License
 MIT — see `LICENSE`.
