@@ -177,6 +177,15 @@ class MongoUploadRepo implements UploadRepository {
     return doc ? { ...doc } : null;
   }
 
+  async update(id: string, updates: Partial<Upload>): Promise<Upload | null> {
+    const result = await this.col().findOneAndUpdate(
+      { id },
+      { $set: { ...updates } },
+      { returnDocument: 'after' }
+    );
+    return result ? ({ ...result } as Upload) : null;
+  }
+
   async delete(id: string): Promise<void> {
     await this.col().deleteOne({ id });
   }

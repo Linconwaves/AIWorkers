@@ -85,6 +85,7 @@ export interface Upload {
   id: string;
   userId: string;
   projectId?: string;
+  name?: string;
   type: UploadType;
   storageKey: string;
   url: string;

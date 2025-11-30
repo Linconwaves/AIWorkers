@@ -2,6 +2,7 @@ import { randomUUID } from 'crypto';
 import { getRepositoryProvider } from '../repositories';
 import { getStorageClient } from '../storage';
 import { Upload, UploadType } from '../repositories/types';
+import sharp from 'sharp';
 
 export class UploadService {
   private repo = getRepositoryProvider();
@@ -12,16 +13,21 @@ export class UploadService {
     projectId: string | undefined,
     type: UploadType,
     buffer: Buffer,
-    contentType: string
+    contentType: string,
+    name?: string
   ): Promise<Upload> {
+    const meta = await sharp(buffer).metadata();
     const uploadResult = await this.storage.uploadImage(buffer, contentType);
     const upload: Upload = {
       id: randomUUID(),
       userId,
       projectId,
       type,
+      name: name?.trim() || 'Asset',
       storageKey: uploadResult.key,
       url: uploadResult.url,
+      width: meta.width,
+      height: meta.height,
       createdAt: new Date()
     };
     await this.repo.uploads.create(upload);
@@ -30,6 +36,13 @@ export class UploadService {
 
   async list(userId: string): Promise<Upload[]> {
     return this.repo.uploads.listByUser(userId);
+  }
+
+  async rename(userId: string, id: string, name: string): Promise<Upload | null> {
+    const existing = await this.repo.uploads.findById(id);
+    if (!existing || existing.userId !== userId) return null;
+    const updated = await this.repo.uploads.update(id, { name: name.trim() });
+    return updated;
   }
 
   async delete(userId: string, id: string): Promise<void> {

@@ -16,6 +16,7 @@ import { registerDesignRoutes } from './designs/routes';
 import { registerPresetRoutes } from './presets/routes';
 import { registerUploadRoutes } from './uploads/routes';
 import { registerHealthRoute } from './common/health';
+import { registerEditingRoutes } from './editing/routes';
 
 export const buildApp = () => {
   const config = getConfig();
@@ -54,6 +55,7 @@ export const buildApp = () => {
   registerDesignRoutes(app);
   registerPresetRoutes(app);
   registerUploadRoutes(app);
+  registerEditingRoutes(app);
 
   registerErrorHandler(app);
 

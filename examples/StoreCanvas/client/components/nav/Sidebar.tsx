@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, FolderOpen, Settings } from 'lucide-react';
+import { Home, FolderOpen, Settings, Wand2, Images } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
@@ -10,6 +10,8 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: Home },
   { href: '/projects', label: 'Projects', icon: FolderOpen },
+  { href: '/assets', label: 'Assets', icon: Images },
+  { href: '/editing', label: 'Editing', icon: Wand2 },
   { href: '/settings', label: 'Settings', icon: Settings },
 ];
 
@@ -43,7 +45,7 @@ export function Sidebar({ collapsed = false, open = false, onClose }: SidebarPro
           <Link href="/" className="flex items-center gap-3">
             <div className="w-10 h-10 relative">
               <Image
-                src="https://cdn.linconwaves.com/linconwaves/no-bg-linconwaves.png"
+                src="https://cdn.linconwaves.com/linconwaves/ai-worker.png"
                 alt="StoreCanvas"
                 fill
                 sizes="40px"

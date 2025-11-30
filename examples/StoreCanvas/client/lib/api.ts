@@ -234,6 +234,37 @@ class ApiClient {
     const query = projectId ? `?projectId=${projectId}` : '';
     return this.request(`/uploads${query}`);
   }
+
+  async renameUpload(id: string, name: string): Promise<Upload> {
+    return this.request(`/uploads/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ name }),
+    });
+  }
+
+  async transformUpload(data: {
+    uploadId: string;
+    mode: 'upscale' | 'downscale' | 'resize';
+    scaleFactor?: number;
+    width?: number;
+    height?: number;
+  }): Promise<{ upload: Upload }> {
+    return this.request('/editing/transform', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async applyFilter(data: {
+    uploadId: string;
+    action: 'blur' | 'brightness' | 'remove_background';
+    value?: number;
+  }): Promise<{ upload: Upload }> {
+    return this.request('/editing/filter', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
 }
 
 export const apiClient = new ApiClient();

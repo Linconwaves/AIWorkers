@@ -129,6 +129,14 @@ class InMemoryUploadRepo implements UploadRepository {
     return this.uploads.get(id) ?? null;
   }
 
+  async update(id: string, updates: Partial<Upload>): Promise<Upload | null> {
+    const existing = this.uploads.get(id);
+    if (!existing) return null;
+    const updated = { ...existing, ...updates };
+    this.uploads.set(id, updated);
+    return updated;
+  }
+
   async delete(id: string): Promise<void> {
     this.uploads.delete(id);
   }

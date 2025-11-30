@@ -138,6 +138,7 @@ export interface Upload {
   projectId?: string;
   storageKey: string;
   url: string;
+  name?: string;
   type: 'logo' | 'screenshot' | 'background' | 'other';
   createdAt: string;
   width?: number;

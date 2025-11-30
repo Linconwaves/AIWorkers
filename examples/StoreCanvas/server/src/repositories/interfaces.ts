@@ -31,6 +31,7 @@ export interface UploadRepository {
   create(upload: Upload): Promise<Upload>;
   listByUser(userId: string): Promise<Upload[]>;
   findById(id: string): Promise<Upload | null>;
+  update(id: string, updates: Partial<Upload>): Promise<Upload | null>;
   delete(id: string): Promise<void>;
 }
 
