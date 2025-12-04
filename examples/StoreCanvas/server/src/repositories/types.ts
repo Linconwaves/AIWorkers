@@ -89,6 +89,8 @@ export interface Upload {
   type: UploadType;
   storageKey: string;
   url: string;
+  format?: string;
+  mimeType?: string;
   width?: number;
   height?: number;
   createdAt: Date;

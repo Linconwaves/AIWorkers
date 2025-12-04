@@ -45,7 +45,7 @@ export function Sidebar({ collapsed = false, open = false, onClose }: SidebarPro
           <Link href="/" className="flex items-center gap-3">
             <div className="w-10 h-10 relative">
               <Image
-                src="https://cdn.linconwaves.com/linconwaves/ai-worker.png"
+                src="/assets/storecanva.png"
                 alt="StoreCanvas"
                 fill
                 sizes="40px"

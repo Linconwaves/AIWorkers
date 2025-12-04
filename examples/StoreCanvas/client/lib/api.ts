@@ -265,6 +265,29 @@ class ApiClient {
       body: JSON.stringify(data),
     });
   }
+
+  async convertUpload(data: { uploadId: string; format: 'png' | 'jpeg' | 'webp' | 'avif' }): Promise<{ upload: Upload }> {
+    return this.request('/editing/convert', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async aiCreate(data: { mode: 'art' | 'power_editor' | 'characters' | 'logos' | 'stock' | 'backgrounds' | 'anime'; prompt?: string }): Promise<{ upload: Upload }> {
+    return this.request('/ai/create', { method: 'POST', body: JSON.stringify(data) });
+  }
+
+  async aiPortrait(data: { mode: 'general' | 'corporate' | 'lunar_new_year' | 'avatar' | 'cosplay' | 'real_estate' | 'medical' | 'xmas' | 'profile_editor' }): Promise<{ upload: Upload }> {
+    return this.request('/ai/portraits', { method: 'POST', body: JSON.stringify(data) });
+  }
+
+  async aiEnhance(data: { action: 'upscale' | 'remove_object' | 'remove_background' | 'restyle' | 'colorize' | 'restore' | 'face_enhance' | 'auto_crop' | 'color_palette'; uploadId: string }): Promise<{ upload: Upload }> {
+    return this.request('/ai/enhance', { method: 'POST', body: JSON.stringify(data) });
+  }
+
+  async aiGame(data: { mode: 'tools' | 'characters' | 'background' | 'copywriter' | 'logo' | 'dnd'; uploadId?: string }): Promise<{ upload: Upload }> {
+    return this.request('/ai/game', { method: 'POST', body: JSON.stringify(data) });
+  }
 }
 
 export const apiClient = new ApiClient();

@@ -58,7 +58,7 @@ export default function AssetsPage() {
                         <div className="flex items-center justify-between">
                           <p className="font-semibold truncate">{upload.name || 'Asset'}</p>
                           <Badge variant="outline" className="capitalize">
-                            {upload.type}
+                            {upload.format ? upload.format.toUpperCase() : upload.type}
                           </Badge>
                         </div>
                         <p className="text-xs text-muted-foreground">

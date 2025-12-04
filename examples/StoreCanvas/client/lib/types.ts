@@ -139,6 +139,8 @@ export interface Upload {
   storageKey: string;
   url: string;
   name?: string;
+  format?: string;
+  mimeType?: string;
   type: 'logo' | 'screenshot' | 'background' | 'other';
   createdAt: string;
   width?: number;

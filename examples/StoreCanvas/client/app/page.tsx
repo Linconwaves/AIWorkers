@@ -33,7 +33,7 @@ export default function Home() {
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 relative">
               <Image
-                src="https://cdn.linconwaves.com/linconwaves/ai-worker.png"
+                src="/assets/storecanva.png"
                 alt="StoreCanvas"
                 fill
                 className="object-contain"

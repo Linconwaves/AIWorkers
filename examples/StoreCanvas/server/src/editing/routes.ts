@@ -17,6 +17,11 @@ const filterSchema = z.object({
   value: z.number().positive().optional(),
 });
 
+const convertSchema = z.object({
+  uploadId: z.string().min(1),
+  format: z.enum(['png', 'jpeg', 'webp', 'avif']),
+});
+
 export const registerEditingRoutes = (app: FastifyInstance) => {
   const service = new EditingService();
 
@@ -42,6 +47,17 @@ export const registerEditingRoutes = (app: FastifyInstance) => {
       uploadId: body.uploadId,
       action: body.action,
       value: body.value,
+    });
+    return { upload };
+  });
+
+  app.post('/editing/convert', { preHandler: [app.authenticate] }, async (request: any) => {
+    const userId = request.authUser.id as string;
+    const body = validateSchema(convertSchema, request.body);
+    const upload = await service.convertFormat({
+      userId,
+      uploadId: body.uploadId,
+      format: body.format,
     });
     return { upload };
   });

@@ -54,6 +54,40 @@ export const registerUploadRoutes = (app: FastifyInstance) => {
     return updated;
   });
 
+  app.get('/uploads/:id/download', { preHandler: [app.authenticate] }, async (request: any, reply) => {
+    const userId = request.authUser.id;
+    const { id } = request.params as { id: string };
+    const filenameParam = ((request.query as any)?.filename as string | undefined)?.trim();
+
+    const upload = await service.get(userId, id);
+    if (!upload) {
+      reply.notFound('Upload not found');
+      return;
+    }
+
+    try {
+      const res = await fetch(upload.url);
+      if (!res.ok) {
+        reply.code(502);
+        return reply.send('Failed to fetch file');
+      }
+      const arrayBuf = await res.arrayBuffer();
+      const buffer = Buffer.from(arrayBuf);
+      const mime = upload.mimeType || res.headers.get('content-type') || 'application/octet-stream';
+      const safeName = filenameParam && filenameParam.length > 0 ? filenameParam.replace(/[^\w.-]/g, '_') : upload.name || 'asset';
+
+      reply
+        .header('Content-Type', mime)
+        .header('Content-Length', buffer.byteLength)
+        .header('Content-Disposition', `attachment; filename="${safeName}"`);
+
+      return reply.send(buffer);
+    } catch (err: any) {
+      reply.code(502);
+      return reply.send('Download failed');
+    }
+  });
+
   // CORS-friendly proxy for stored images (e.g., R2) to avoid canvas tainting issues.
   app.get('/uploads/proxy', async (request: any, reply) => {
     const url = (request.query as any)?.url as string | undefined;

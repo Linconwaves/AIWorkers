@@ -7,6 +7,7 @@ import { randomUUID } from 'crypto';
 
 export type TransformMode = 'upscale' | 'downscale' | 'resize';
 export type FilterAction = 'blur' | 'brightness' | 'remove_background';
+export type ConvertFormat = 'png' | 'jpeg' | 'webp' | 'avif';
 
 export interface TransformRequest {
   userId: string;
@@ -22,6 +23,12 @@ export interface FilterRequest {
   uploadId: string;
   action: FilterAction;
   value?: number;
+}
+
+export interface ConvertRequest {
+  userId: string;
+  uploadId: string;
+  format: ConvertFormat;
 }
 
 export class EditingService {
@@ -46,6 +53,7 @@ export class EditingService {
     const { targetWidth, targetHeight } = this.calculateTargetSize(baseWidth, baseHeight, params);
 
     const format = sourceMeta.format ?? 'png';
+    const mimeType = this.formatToMime(format);
     const processedBuffer = await sharp(sourceBuffer)
       .resize(targetWidth, targetHeight, {
         fit: 'fill'
@@ -67,6 +75,8 @@ export class EditingService {
       type: upload.type ?? 'other',
       storageKey: stored.key,
       url: stored.url,
+      format,
+      mimeType,
       width,
       height,
       createdAt: new Date()
@@ -119,6 +129,8 @@ export class EditingService {
       type: upload.type ?? 'other',
       storageKey: stored.key,
       url: stored.url,
+      format: 'png',
+      mimeType: 'image/png',
       width,
       height,
       createdAt: new Date()
@@ -126,6 +138,37 @@ export class EditingService {
 
     await this.repo.uploads.create(editedUpload);
     return editedUpload;
+  }
+
+  async convertFormat(params: ConvertRequest): Promise<Upload> {
+    const upload = await this.repo.uploads.findById(params.uploadId);
+    if (!upload || upload.userId !== params.userId) {
+      throw new Error('Upload not found');
+    }
+
+    const sourceBuffer = await this.fetchBuffer(upload.url);
+    const converted = await sharp(sourceBuffer).toFormat(params.format).toBuffer();
+    const meta = await sharp(converted).metadata();
+    const mimeType = this.formatToMime(params.format);
+    const stored = await this.storage.uploadImage(converted, mimeType);
+
+    const newUpload: Upload = {
+      id: randomUUID(),
+      userId: upload.userId,
+      projectId: upload.projectId,
+      name: upload.name ? `${upload.name} (${params.format})` : `Asset (${params.format})`,
+      type: upload.type ?? 'other',
+      storageKey: stored.key,
+      url: stored.url,
+      format: params.format,
+      mimeType,
+      width: meta.width ?? upload.width,
+      height: meta.height ?? upload.height,
+      createdAt: new Date()
+    };
+
+    await this.repo.uploads.create(newUpload);
+    return newUpload;
   }
 
   private calculateTargetSize(

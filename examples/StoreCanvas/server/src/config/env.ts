@@ -5,6 +5,10 @@ const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
   AIWORKERS_BASE_URL: z.string().url(),
   AIWORKER_API_KEY: z.string(),
+  AIWORKER_IMAGE_MODELS: z
+    .string()
+    .default('phoenix-1p0,sd-v1-5-img2img,lucid-origin,flux-1-schnell'),
+  AIWORKER_LLM_MODEL: z.string().default('gpt-oss-20b'),
   BACKGROUND_MODEL_ID: z.string(),
   IMG2IMG_MODEL_ID: z.string(),
   INPAINT_MODEL_ID: z.string(),

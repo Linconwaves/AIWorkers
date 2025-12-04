@@ -8,6 +8,12 @@ export class UploadService {
   private repo = getRepositoryProvider();
   private storage = getStorageClient();
 
+  async get(userId: string, id: string): Promise<Upload | null> {
+    const existing = await this.repo.uploads.findById(id);
+    if (!existing || existing.userId !== userId) return null;
+    return existing;
+  }
+
   async createFromBuffer(
     userId: string,
     projectId: string | undefined,
@@ -17,7 +23,9 @@ export class UploadService {
     name?: string
   ): Promise<Upload> {
     const meta = await sharp(buffer).metadata();
-    const uploadResult = await this.storage.uploadImage(buffer, contentType);
+    const detectedFormat = meta.format ?? this.inferFormatFromMime(contentType);
+    const mimeType = this.formatToMime(detectedFormat) || contentType || 'application/octet-stream';
+    const uploadResult = await this.storage.uploadImage(buffer, mimeType);
     const upload: Upload = {
       id: randomUUID(),
       userId,
@@ -26,6 +34,8 @@ export class UploadService {
       name: name?.trim() || 'Asset',
       storageKey: uploadResult.key,
       url: uploadResult.url,
+      format: detectedFormat || undefined,
+      mimeType,
       width: meta.width,
       height: meta.height,
       createdAt: new Date()
@@ -52,5 +62,30 @@ export class UploadService {
     }
     await this.storage.deleteObject(existing.storageKey);
     await this.repo.uploads.delete(id);
+  }
+
+  private formatToMime(format?: string | null): string | null {
+    switch (format) {
+      case 'jpeg':
+      case 'jpg':
+        return 'image/jpeg';
+      case 'png':
+        return 'image/png';
+      case 'webp':
+        return 'image/webp';
+      case 'avif':
+        return 'image/avif';
+      default:
+        return null;
+    }
+  }
+
+  private inferFormatFromMime(mime?: string | null): string | null {
+    if (!mime) return null;
+    if (mime.includes('jpeg')) return 'jpeg';
+    if (mime.includes('png')) return 'png';
+    if (mime.includes('webp')) return 'webp';
+    if (mime.includes('avif')) return 'avif';
+    return null;
   }
 }

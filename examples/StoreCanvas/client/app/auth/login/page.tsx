@@ -50,7 +50,7 @@ export default function LoginPage() {
           <div className="flex justify-center">
             <div className="w-16 h-16 relative">
               <Image
-                src="https://cdn.linconwaves.com/linconwaves/ai-worker.png"
+                src="/assets/storecanva.png"
                 alt="StoreCanvas"
                 fill
                 className="object-contain"
